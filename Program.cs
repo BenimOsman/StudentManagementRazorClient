@@ -1,3 +1,4 @@
+using StudentManagementRazorClientApp;
 using StudentManagementRazorClientApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);

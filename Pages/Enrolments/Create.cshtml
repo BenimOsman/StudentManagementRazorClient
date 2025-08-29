@@ -1,0 +1,42 @@
+﻿@page
+@model StudentManagementRazorClientApp.Pages.Enrolments.CreateModel
+@{
+    ViewData["Title"] = "Create Enrolment";
+}
+
+<h2>Create Enrolment</h2>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.StudentId" class="form-label"></label>
+        <input asp-for="Enrolment.StudentId" class="form-control" type="number" />
+        <span asp-validation-for="Enrolment.StudentId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.CourseId" class="form-label"></label>
+        <input asp-for="Enrolment.CourseId" class="form-control" type="number" />
+        <span asp-validation-for="Enrolment.CourseId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.JoiningDate" class="form-label"></label>
+        <input asp-for="Enrolment.JoiningDate" class="form-control" type="date" />
+        <span asp-validation-for="Enrolment.JoiningDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.Grade" class="form-label"></label>
+        <input asp-for="Enrolment.Grade" class="form-control" />
+        <span asp-validation-for="Enrolment.Grade" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

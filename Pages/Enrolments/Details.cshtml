@@ -1,0 +1,36 @@
+﻿@page "{id:int}"
+@model StudentManagementRazorClientApp.Pages.Enrolments.DetailsModel
+@{
+    ViewData["Title"] = "Enrolment Details";
+}
+
+<h2>Enrolment Details</h2>
+
+@if (Model.Enrolment == null)
+{
+    <div class="alert alert-warning">Enrolment not found.</div>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-3">Enrolment ID</dt>
+        <dd class="col-sm-9">@Model.Enrolment.EnrolmentId</dd>
+
+        <dt class="col-sm-3">Student ID</dt>
+        <dd class="col-sm-9">@Model.Enrolment.StudentId</dd>
+
+        <dt class="col-sm-3">Course ID</dt>
+        <dd class="col-sm-9">@Model.Enrolment.CourseId</dd>
+
+        <dt class="col-sm-3">Joining Date</dt>
+        <dd class="col-sm-9">@Model.Enrolment.JoiningDate.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-3">Grade</dt>
+        <dd class="col-sm-9">@Model.Enrolment.Grade</dd>
+    </dl>
+
+    <p>
+        <a asp-page="Edit" asp-route-id="@Model.Enrolment.EnrolmentId" class="btn btn-primary">Edit</a>
+        <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+    </p>
+}

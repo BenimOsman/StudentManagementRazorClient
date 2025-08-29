@@ -1,0 +1,19 @@
+﻿@page
+@model StudentManagementRazorClientApp.Pages.Courses.DetailsModel
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>Course Details</h1>
+
+<div class="mb-3">
+    <label>Title:</label>
+    <p>@Model.Course.Title</p>
+</div>
+
+<div class="mb-3">
+    <label>Credits:</label>
+    <p>@Model.Course.Credits</p>
+</div>
+
+<a asp-page="Index" class="btn btn-secondary">Back</a>

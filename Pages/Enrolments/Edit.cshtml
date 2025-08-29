@@ -1,0 +1,43 @@
+﻿@page "{id:int}"
+@model StudentManagementRazorClientApp.Pages.Enrolments.EditModel
+@{
+    ViewData["Title"] = "Edit Enrolment";
+}
+
+<h2>Edit Enrolment</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Enrolment.EnrolmentId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.StudentId" class="form-label"></label>
+        <input asp-for="Enrolment.StudentId" class="form-control" type="number" />
+        <span asp-validation-for="Enrolment.StudentId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.CourseId" class="form-label"></label>
+        <input asp-for="Enrolment.CourseId" class="form-control" type="number" />
+        <span asp-validation-for="Enrolment.CourseId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.JoiningDate" class="form-label"></label>
+        <input asp-for="Enrolment.JoiningDate" class="form-control" type="date" />
+        <span asp-validation-for="Enrolment.JoiningDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Enrolment.Grade" class="form-label"></label>
+        <input asp-for="Enrolment.Grade" class="form-control" />
+        <span asp-validation-for="Enrolment.Grade" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

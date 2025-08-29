@@ -20,8 +20,28 @@ namespace StudentManagementRazorClientApp.Services
         public async Task<List<CourseModel>> GetCoursesAsync()
         {
             using HttpClient client = GetHttpClient();
-            await using Stream stream = await client.GetStreamAsync(baseUrl);
-            return await JsonSerializer.DeserializeAsync<List<CourseModel>>(stream) ?? new List<CourseModel>();
+            await using var stream = await client.GetStreamAsync(baseUrl);
+            return await JsonSerializer.DeserializeAsync<List<CourseModel>>(
+                stream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true } // important
+            ) ?? new List<CourseModel>();
+        }
+
+
+        public async Task<CourseModel?> AddCourseAsync(CourseModel course)
+        {
+            using HttpClient client = GetHttpClient();
+            var response = await client.PostAsJsonAsync(baseUrl, course);
+            if (!response.IsSuccessStatusCode) return null;
+            return await response.Content.ReadFromJsonAsync<CourseModel>();
+        }
+
+       
+        public async Task<bool> DeleteCourseAsync(int id)
+        {
+            using HttpClient client = GetHttpClient();
+            var response = await client.DeleteAsync($"{baseUrl}/{id}");
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<CourseModel?> GetCourseByIdAsync(int id)
@@ -32,26 +52,12 @@ namespace StudentManagementRazorClientApp.Services
             return await response.Content.ReadFromJsonAsync<CourseModel>();
         }
 
-        public async Task<CourseModel?> AddCourseAsync(CourseModel course)
-        {
-            using HttpClient client = GetHttpClient();
-            var response = await client.PostAsJsonAsync(baseUrl, course);
-            if (!response.IsSuccessStatusCode) return null;
-            return await response.Content.ReadFromJsonAsync<CourseModel>();
-        }
-
-        public async Task<CourseModel?> UpdateCourseAsync(CourseModel course)
+        public async Task<bool> UpdateCourseAsync(CourseModel course)
         {
             using HttpClient client = GetHttpClient();
             var response = await client.PutAsJsonAsync($"{baseUrl}/{course.CourseId}", course);
-            if (!response.IsSuccessStatusCode) return null;
-            return await response.Content.ReadFromJsonAsync<CourseModel>();
-        }
 
-        public async Task<bool> DeleteCourseAsync(int id)
-        {
-            using HttpClient client = GetHttpClient();
-            var response = await client.DeleteAsync($"{baseUrl}/{id}");
+            // Return true if API call succeeded (status code 200/204)
             return response.IsSuccessStatusCode;
         }
     }

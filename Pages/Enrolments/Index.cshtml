@@ -1,0 +1,55 @@
+﻿@page
+@model StudentManagementRazorClientApp.Pages.Enrolments.IndexModel
+@{
+    ViewData["Title"] = "Enrolments";
+}
+
+<h1>Enrolments</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+{
+    <div class="alert alert-info">@Model.StatusMessage</div>
+}
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Add New Enrolment</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Enrolment ID</th>
+            <th>Student ID</th>
+            <th>Course ID</th>
+            <th>Joining Date</th>
+            <th>Grade</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Enrolments != null && Model.Enrolments.Count > 0)
+        {
+            foreach (var enrol in Model.Enrolments)
+            {
+                <tr>
+                    <td>@enrol.EnrolmentId</td>
+                    <td>@enrol.StudentId</td>
+                    <td>@enrol.CourseId</td>
+                    <td>@enrol.JoiningDate.ToString("yyyy-MM-dd")</td>
+                    <td>@enrol.Grade</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@enrol.EnrolmentId">Edit</a> |
+                        <a asp-page="Details" asp-route-id="@enrol.EnrolmentId">Details</a> |
+                        <a asp-page="Delete" asp-route-id="@enrol.EnrolmentId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-muted">No enrolments found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
