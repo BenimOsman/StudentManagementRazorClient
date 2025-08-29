@@ -1,0 +1,35 @@
+﻿@page
+@model StudentManagementRazorClientApp.Pages.Students.IndexModel
+@{
+    ViewData["Title"] = "Students List";
+}
+
+<h1>Students</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="Create">Create New Student</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>@student.Name</td>
+                <td>@student.Age</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@student.StudentId">Edit</a> |
+                    <a asp-page="Details" asp-route-id="@student.StudentId">Details</a> |
+                    <a asp-page="Delete" asp-route-id="@student.StudentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
