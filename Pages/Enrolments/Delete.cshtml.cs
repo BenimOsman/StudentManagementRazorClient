@@ -2,49 +2,70 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StudentManagementRazorClientApp.Models;
 using StudentManagementRazorClientApp.Services;
+using System.Threading.Tasks;
 
 namespace StudentManagementRazorClientApp.Pages.Enrolments
 {
     public class DeleteModel : PageModel
     {
-        private readonly EnrolmentService _enrolmentService;
+        private readonly EnrolmentService _enrolmentService;                                                // Service for API calls
+        private readonly StudentService _studentService;
+        private readonly CourseService _courseService;
 
-        public DeleteModel(EnrolmentService enrolmentService)
+        public DeleteModel(                                                                                 // Constructor with dependency injection of CourseService
+            EnrolmentService enrolmentService,
+            StudentService studentService,
+            CourseService courseService)
         {
             _enrolmentService = enrolmentService;
+            _studentService = studentService;
+            _courseService = courseService;
         }
 
-        [BindProperty]
-        public EnrolmentModel? Enrolment { get; set; }
+        // Properties to hold enrolment and related names
+        public EnrolmentModel Enrolment { get; set; } = default!;
+        public string StudentName { get; private set; } = string.Empty;
+        public string CourseName { get; private set; } = string.Empty;
 
-        [TempData]
-        public string? StatusMessage { get; set; }
-
+        // GET: Load the enrolment to confirm deletion
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Enrolment = await _enrolmentService.GetEnrolmentByIdAsync(id);
-            if (Enrolment == null)
-            {
-                StatusMessage = "Enrolment not found.";
-                return RedirectToPage("Index");
-            }
-            return Page();
+            if (id <= 0)
+                return NotFound();
+
+            var enrolment = await _enrolmentService.GetEnrolmentByIdAsync(id);                              // Fetch enrolment from API
+
+            if (enrolment == null)
+                return NotFound();
+
+            Enrolment = enrolment;
+
+            // Fetch related student and course names
+            var studentTask = _studentService.GetStudentByIdAsync(enrolment.StudentId);
+            var courseTask = _courseService.GetCourseByIdAsync(enrolment.CourseId);
+            await Task.WhenAll(studentTask, courseTask);
+
+            StudentName = studentTask.Result?.Name ?? $"(ID: {enrolment.StudentId})";
+            CourseName = courseTask.Result?.Title ?? $"(ID: {enrolment.CourseId})";
+
+            return Page();                                                                                  // Render Delete confirmation page
         }
 
+        // POST: Perform the deletion
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            // prefer id from route; hidden input is a fallback
-            var success = await _enrolmentService.DeleteEnrolmentAsync(id);
-            if (!success)
+            if (id <= 0)
+                return NotFound();
+
+            var deleted = await _enrolmentService.DeleteEnrolmentAsync(id);                                 // Call API to delete the enrolment
+
+            if (!deleted)                                                                                   // If deletion failed, show error
             {
-                ModelState.AddModelError(string.Empty, "Unable to delete the enrolment.");
-                // Reload to show details again
-                Enrolment = await _enrolmentService.GetEnrolmentByIdAsync(id);
+                ModelState.AddModelError(string.Empty, "Error deleting enrolment. Please try again.");
                 return Page();
             }
 
-            StatusMessage = "Enrolment deleted successfully.";
-            return RedirectToPage("Index");
+            return RedirectToPage("Index");                                                                 // Redirect to list after successful deletion
         }
     }
 }

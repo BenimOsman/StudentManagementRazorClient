@@ -4,33 +4,35 @@
     ViewData["Title"] = "Enrolment Details";
 }
 
-<h2>Enrolment Details</h2>
+<div class="d-flex flex-column align-items-center mt-5">
 
-@if (Model.Enrolment == null)
-{
-    <div class="alert alert-warning">Enrolment not found.</div>
-}
-else
-{
-    <dl class="row">
-        <dt class="col-sm-3">Enrolment ID</dt>
-        <dd class="col-sm-9">@Model.Enrolment.EnrolmentId</dd>
+    <!-- Header -->
+    <div class="mb-4 text-center">
+        <h1 class="display-4">Enrolment Details</h1>
+        <a class="btn btn-secondary mt-2" asp-page="Index">
+            <i class="bi bi-arrow-left-circle"></i> Back to List
+        </a>
+    </div>
 
-        <dt class="col-sm-3">Student ID</dt>
-        <dd class="col-sm-9">@Model.Enrolment.StudentId</dd>
+    <!-- Details Card -->
+    <div class="card w-50 shadow-sm p-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Enrolment ID</dt>
+                <dd class="col-sm-8">@Model.Enrolment.EnrolmentId</dd>
 
-        <dt class="col-sm-3">Course ID</dt>
-        <dd class="col-sm-9">@Model.Enrolment.CourseId</dd>
+                <dt class="col-sm-4">Student</dt>
+                <dd class="col-sm-8">@Model.StudentName</dd>
 
-        <dt class="col-sm-3">Joining Date</dt>
-        <dd class="col-sm-9">@Model.Enrolment.JoiningDate.ToString("yyyy-MM-dd")</dd>
+                <dt class="col-sm-4">Course</dt>
+                <dd class="col-sm-8">@Model.CourseName</dd>
 
-        <dt class="col-sm-3">Grade</dt>
-        <dd class="col-sm-9">@Model.Enrolment.Grade</dd>
-    </dl>
+                <dt class="col-sm-4">Joining Date</dt>
+                <dd class="col-sm-8">@Model.Enrolment.JoiningDate.ToString("dd-MM-yyyy")</dd>
 
-    <p>
-        <a asp-page="Edit" asp-route-id="@Model.Enrolment.EnrolmentId" class="btn btn-primary">Edit</a>
-        <a asp-page="Index" class="btn btn-secondary">Back to List</a>
-    </p>
-}
+                <dt class="col-sm-4">Grade</dt>
+                <dd class="col-sm-8">@Model.Enrolment.Grade</dd>
+            </dl>
+        </div>
+    </div>
+</div>

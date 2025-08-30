@@ -7,46 +7,39 @@ namespace StudentManagementRazorClientApp.Pages.Courses
 {
     public class EditModel : PageModel
     {
-        private readonly CourseService _courseService;
+        private readonly CourseService _courseService;                                                      // Service to interact with Course API
 
-        public EditModel(CourseService courseService)
+        public EditModel(CourseService courseService)                                                       // Constructor with dependency injection of CourseService
         {
-            _courseService = courseService;
+            _courseService = courseService;                                                                 // Assign injected service to local variable
         }
 
-        [BindProperty]
-        public CourseModel Course { get; set; } = default!;
+        [BindProperty]                                                                                      // Property bound to the form inputs on the Edit page
+        public CourseModel Course { get; set; } = new CourseModel(0, string.Empty, 0);                      // Initialize with default values for positional record
 
+        // GET handler: Load course details for editing
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Course = await _courseService.GetCourseByIdAsync(id);
-            if (Course == null)
-            {
-                // Could also return NotFound();
-                return RedirectToPage("Index");
-            }
-            return Page();
+            var course = await _courseService.GetCourseByIdAsync(id);                                       // Fetch course by ID
+            if (course == null) return NotFound();                                                          // Return 404 if not found
+
+            Course = course;                                                                                // Bind fetched course to property
+            return Page();                                                                                  // Render the page
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        // POST handler: Save edited course
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            if (!ModelState.IsValid) return Page();                                                         // Return page if validation fails
 
-            // Ensure the key is present (covers case hidden input is missing)
-            if (Course.CourseId == 0)
-                Course.CourseId = id;
-
-            bool updated = await _courseService.UpdateCourseAsync(Course);
-            if (!updated)
+            var result = await _courseService.UpdateCourseAsync(Course);                                    // Call API to update course
+            if (!result)
             {
-                ModelState.AddModelError(string.Empty, "Unable to update the course.");
-                return Page(); // <-- stay on edit to show the error
+                ModelState.AddModelError(string.Empty, "Error updating course. Please try again.");
+                return Page();
             }
 
-            // Optional UX: show a success toast/message on Index
-            TempData["StatusMessage"] = "Course updated successfully.";
-            return RedirectToPage("Index");
+            return RedirectToPage("Index");                                                                 // Redirect to Index on success
         }
     }
 }

@@ -2,45 +2,55 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StudentManagementRazorClientApp.Models;
 using StudentManagementRazorClientApp.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StudentManagementRazorClientApp.Pages.Enrolments
 {
     public class CreateModel : PageModel
     {
-        private readonly EnrolmentService _enrolmentService;
+        private readonly EnrolmentService _enrolmentService;                                                // Service to call APIs
+        private readonly StudentService _studentService;
+        private readonly CourseService _courseService;
 
-        public CreateModel(EnrolmentService enrolmentService)
+        public CreateModel(                                                                                 // Constructor with Dependency Injection
+            EnrolmentService enrolmentService,
+            StudentService studentService,
+            CourseService courseService)
         {
-            _enrolmentService = enrolmentService;
+            _enrolmentService = enrolmentService;                                                           // Assigned injected service to local variable
+            _studentService = studentService;
+            _courseService = courseService;
         }
 
-        [BindProperty]
-        public EnrolmentModel Enrolment { get; set; } = new();
+        [BindProperty]                                                                                      // Property bound to the form data for creating a new enrolment
+        public EnrolmentModel Enrolment { get; set; } = new EnrolmentModel(0, 0, 0, DateTime.Now, string.Empty);            // Initialize with default values for positional record
 
-        [TempData]
-        public string? StatusMessage { get; set; }
-
-        public void OnGet()
+        public List<StudentModel> Students { get; set; } = new List<StudentModel>();                        // Initialize the students model
+        public List<CourseModel> Courses { get; set; } = new List<CourseModel>();                           // Initialize the course model
+            
+        // GET handler (loads the page initially)
+        public async Task OnGetAsync()
         {
-            // Default date for UX
-            if (Enrolment.JoiningDate == default)
-                Enrolment.JoiningDate = DateTime.Today;
+            Students = await _studentService.GetAllStudentsAsync();
+            Courses = await _courseService.GetAllCoursesAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        // POST handler (called when form is submitted) 
+        public async Task<IActionResult> OnPostAsync()                                  
         {
-            if (!ModelState.IsValid)
-                return Page();
+            if (!ModelState.IsValid)                                                                        // Validate form inputs
+                return Page();                                                                              // Return page if validation fails
 
-            var created = await _enrolmentService.AddEnrolmentAsync(Enrolment);
-            if (created == null)
+            var created = await _enrolmentService.AddEnrolmentAsync(Enrolment);                             // Call the API to create the new course
+            
+            if (created == null)                                                                            // If API fails, show error message on page
             {
-                ModelState.AddModelError(string.Empty, "Unable to create enrolment.");
+                ModelState.AddModelError(string.Empty, "Error creating enrolment.");
                 return Page();
             }
 
-            StatusMessage = "Enrolment created successfully.";
-            return RedirectToPage("Index");
+            return RedirectToPage("Index");                                                                 // Redirect to Index page after successful creation
         }
     }
 }

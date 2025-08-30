@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc;
 using StudentManagementRazorClientApp.Models;
 using StudentManagementRazorClientApp.Services;
 
@@ -7,31 +6,20 @@ namespace StudentManagementRazorClientApp.Pages.Enrolments
 {
     public class IndexModel : PageModel
     {
-        private readonly EnrolmentService _enrolmentService;
+        private readonly EnrolmentService _enrolmentService;                                            // Service to call Enrolment API
 
-        public IndexModel(EnrolmentService enrolmentService)
+        public IndexModel(EnrolmentService enrolmentService)                                            // Constructor with Dependency Injection of EnrolmentService
         {
-            _enrolmentService = enrolmentService;
+            _enrolmentService = enrolmentService;                                                       // Assigned injected service to local variable
         }
 
-        public IList<EnrolmentModel> Enrolments { get; set; } = new List<EnrolmentModel>();
+        public IList<EnrolmentModel> Enrolments { get; set; } = new List<EnrolmentModel>();             // Property bound to the form data for creating a new enrolment
 
-        [TempData]
-        public string? StatusMessage { get; set; }
-
+        // GET request handler
         public async Task OnGetAsync()
         {
-            try
-            {
-                Enrolments = await _enrolmentService.GetEnrolmentsAsync();
-            }
-            catch (Exception ex)
-            {
-                // Don’t crash the page; surface a friendly message
-                StatusMessage = "Unable to load enrolments at this time.";
-                // Optionally log ex
-                Enrolments = new List<EnrolmentModel>();
-            }
+            Enrolments = await _enrolmentService.GetEnrolmentsAsync();                                  // Fetch all enrolments including StudentName and CourseName
+
         }
     }
 }

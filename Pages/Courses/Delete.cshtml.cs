@@ -7,33 +7,37 @@ namespace StudentManagementRazorClientApp.Pages.Courses
 {
     public class DeleteModel : PageModel
     {
-        private readonly CourseService _courseService;
+        private readonly CourseService _courseService;                                                      // Service for API calls
 
-        public DeleteModel(CourseService courseService)
+        public DeleteModel(CourseService courseService)                                                     // Constructor with dependency injection of CourseService
         {
-            _courseService = courseService;
+            _courseService = courseService;                                                                 // Assign injected service to local variable
         }
 
-        [BindProperty]
-        public CourseModel Course { get; set; } = new CourseModel();
+        [BindProperty]                                                                                      // Property bound to the form inputs on the Details page
+        public CourseModel Course { get; set; } = new CourseModel(0, string.Empty, 0);                      // Initialize with default values for positional record
 
+        // GET: Load course details to confirm deletion
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Course = await _courseService.GetCourseByIdAsync(id);
-            if (Course == null)
-                return RedirectToPage("Index");
+            var course = await _courseService.GetCourseByIdAsync(id);                                       // Call the service to fetch course by its ID
+            if (course == null) return NotFound();                                                          // Return a 404 Not Found response if course doesn't exist
 
-            return Page();
+            Course = course;                                                                                // Bind the fetched course to the PageModel property
+            return Page();                                                                                  // Returns the deleted page 
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        // POST: Delete course
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (Course.CourseId != 0)
+            var result = await _courseService.DeleteCourseAsync(id);                                        // Call the service to delete the course by ID
+            if (!result)                                                                                    // Check if deletion failed
             {
-                await _courseService.DeleteCourseAsync(Course.CourseId);
+                ModelState.AddModelError(string.Empty, "Error deleting course. Please try again.");         // Add a model-level error message
+                return Page();
             }
 
-            return RedirectToPage("Index");
+            return RedirectToPage("Index");                                                                 // Redirect to Index after deletion
         }
     }
 }

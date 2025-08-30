@@ -1,10 +1,139 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    /* Full-page wrapper */
+    .home-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    /* Header section */
+    .home-header {
+        margin-top: 50px;
+    }
+
+        .home-header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .home-header p {
+            color: #6c757d;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+    /* Cards container */
+    .home-cards {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 50px;
+        padding: 0 20px;
+    }
+
+    .home-card {
+        flex: 0 0 250px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 20px;
+        background-color: #fff;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .home-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .home-card h5 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .home-card p {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .home-card a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+    .btn-primary {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+
+    .btn-success {
+        background-color: #198754;
+        color: #fff;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    /* Footer at bottom */
+    .home-footer {
+        margin-top: auto;
+        padding: 20px 0;
+        color: #6c757d;
+    }
+</style>
+
+<div class="home-wrapper">
+
+    <!-- Header -->
+    <div class="home-header">
+        <h1>Welcome to Student Management Portal</h1>
+        <p>Manage students, courses, and enrolments efficiently and easily.</p>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="home-cards">
+        <div class="home-card">
+            <h5>👩‍🎓 Students</h5>
+            <p>View, create, edit, and delete student records.</p>
+            <a asp-page="/Students/Index" class="btn-primary">View Students</a>
+        </div>
+        <div class="home-card">
+            <h5>📚 Courses</h5>
+            <p>Manage all courses, including details and schedules.</p>
+            <a asp-page="/Courses/Index" class="btn-success">View Courses</a>
+        </div>
+        <div class="home-card">
+            <h5>📝 Enrolments</h5>
+            <p>Track which students are enrolled in which courses.</p>
+            <a asp-page="/Enrolments/Index" class="btn-warning">View Enrolments</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="home-footer">
+        © 2025 Student Management Portal. All rights reserved.
+    </div>
+
+</div

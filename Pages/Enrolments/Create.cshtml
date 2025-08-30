@@ -7,36 +7,29 @@
 <h2>Create Enrolment</h2>
 
 <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <div class="mb-3">
-        <label asp-for="Enrolment.StudentId" class="form-label"></label>
-        <input asp-for="Enrolment.StudentId" class="form-control" type="number" />
-        <span asp-validation-for="Enrolment.StudentId" class="text-danger"></span>
+        <label asp-for="Enrolment.StudentId">Student</label>
+        <select asp-for="Enrolment.StudentId" class="form-select" asp-items="@(new SelectList(Model.Students, "StudentId", "Name"))">
+            <option value="">-- Select Student --</option>
+        </select>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Enrolment.CourseId" class="form-label"></label>
-        <input asp-for="Enrolment.CourseId" class="form-control" type="number" />
-        <span asp-validation-for="Enrolment.CourseId" class="text-danger"></span>
+        <label asp-for="Enrolment.CourseId">Course</label>
+        <select asp-for="Enrolment.CourseId" class="form-select" asp-items="@(new SelectList(Model.Courses, "CourseId", "Title"))">
+            <option value="">-- Select Course --</option>
+        </select>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Enrolment.JoiningDate" class="form-label"></label>
+        <label asp-for="Enrolment.JoiningDate"></label>
         <input asp-for="Enrolment.JoiningDate" class="form-control" type="date" />
-        <span asp-validation-for="Enrolment.JoiningDate" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Enrolment.Grade" class="form-label"></label>
+        <label asp-for="Enrolment.Grade"></label>
         <input asp-for="Enrolment.Grade" class="form-control" />
-        <span asp-validation-for="Enrolment.Grade" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

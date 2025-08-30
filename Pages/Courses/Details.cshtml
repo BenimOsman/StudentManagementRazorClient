@@ -4,16 +4,21 @@
     ViewData["Title"] = "Course Details";
 }
 
-<h1>Course Details</h1>
+<div class="d-flex flex-column align-items-center mt-5">
 
-<div class="mb-3">
-    <label>Title:</label>
-    <p>@Model.Course.Title</p>
+    <!-- Header -->
+    <div class="mb-4 text-center">
+        <h1 class="display-4">Course Details</h1>
+        <a class="btn btn-secondary mt-2" asp-page="Index">
+            <i class="bi bi-arrow-left-circle"></i> Back to List
+        </a>
+    </div>
+
+    <!-- Details Card -->
+    <div class="card w-50 shadow-sm p-3">
+        <div class="card-body">
+            <h5 class="card-title">Title: @Model.Course.Title</h5>
+            <p class="card-text">Credits: @Model.Course.Credits</p>
+        </div>
+    </div>
 </div>
-
-<div class="mb-3">
-    <label>Credits:</label>
-    <p>@Model.Course.Credits</p>
-</div>
-
-<a asp-page="Index" class="btn btn-secondary">Back</a>

@@ -1,17 +1,23 @@
-﻿@page "{id:int}"
+﻿@page
 @model StudentManagementRazorClientApp.Pages.Students.DetailsModel
 @{
     ViewData["Title"] = "Student Details";
 }
 
-<h1>Student Details</h1>
+<div class="d-flex flex-column align-items-center mt-5">
 
-<div>
-    <h4>Name: @Model.Student.Name</h4>
-    <h4>Age: @Model.Student.Age</h4>
+    <!-- Page Header -->
+    <div class="mb-4 text-center">
+        <h1 class="display-4">Student Details</h1>
+        <a class="btn btn-secondary mt-2" asp-page="Index">
+            <i class="bi bi-arrow-left-circle"></i> Back to List
+        </a>
+    </div>
+
+    <!-- Student Details Card -->
+    <div class="card shadow-sm w-50 p-4">
+        <h5><strong>Name:</strong> @Model.Student.Name</h5>
+        <h5><strong>Age:</strong> @Model.Student.Age</h5>
+        <h5><strong>ID:</strong> @Model.Student.StudentId</h5>
+    </div>
 </div>
-
-<p>
-    <a asp-page="Edit" asp-route-id="@Model.Student.StudentId" class="btn btn-primary">Edit</a>
-    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
-</p>
